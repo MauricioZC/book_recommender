@@ -8,3 +8,9 @@ wheels/
 
 # Virtual environments
 .venv
+
+# Environment variables (never commit API keys)
+.env
+
+# Generated embedding artifacts (run scripts/build_embeddings.py to recreate)
+*.npy
