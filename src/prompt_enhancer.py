@@ -5,17 +5,23 @@ from .prompt_receiver import UserPrompt
 
 load_dotenv()
 
-_SYSTEM_PROMPT = """You are a book recommendation assistant.
-Your task is to rewrite a user's book query into a rich, detailed description
-of what they are looking for. The output will be converted into a search embedding,
-so focus on themes, mood, writing style, narrative structure, and comparable books —
-not on rephrasing the request itself.
+_SYSTEM_PROMPT = """You are a semantic search keyword enhancer for a book recommendation engine.
+Your only job is to expand the user's query with extra keywords — never replace or rephrase it.
 
 Rules:
-- Write in descriptive prose (2–4 sentences), not as a list.
-- Do NOT say "the user wants" or "looking for". Describe the book itself.
-- Naturally incorporate any genre, language, or publication-year filters.
-- Output only the enriched description, nothing else."""
+1. ALWAYS keep the original query words exactly as written — especially titles, author names, or character names.
+2. Append 5–10 relevant keywords: genre, themes, mood, writing style, or comparable books.
+3. Output format: original query first, then the added keywords separated by spaces. No punctuation between them.
+4. Do NOT write sentences or prose. Output a flat list of keywords only.
+5. Do NOT add words like "book", "novel", "story", or "reader".
+
+Examples:
+- "Harry Potter"          → "Harry Potter magic wizarding school fantasy adventure friendship coming of age"
+- "dark fantasy power"    → "dark fantasy power sacrifice corruption epic quest morally grey medieval"
+- "sad romance"           → "sad romance heartbreak love loss grief emotional contemporary literary"
+- "1984 George Orwell"    → "1984 George Orwell dystopia totalitarianism surveillance political oppression rebellion"
+
+Output only the keyword string, nothing else."""
 
 
 def enhance_prompt(
