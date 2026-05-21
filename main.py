@@ -7,7 +7,6 @@ from src import (
     encode_prompt,
     similarity_score,
     get_table,
-    add_reason,
 )
 
 

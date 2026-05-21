@@ -5,7 +5,8 @@ import pandas as pd
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage, AIMessage
 from langchain_core.tools import tool
-from langchain.agents import create_agent
+from langchain.agents import create_tool_calling_agent, AgentExecutor
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 
 from src import (
     receive_prompt,
@@ -67,25 +68,31 @@ def make_search_tool(books_df: pd.DataFrame, embeddings_matrix: np.ndarray):
 
 
 class BookChat:
-    """Wraps a langchain v1 agent with conversation history."""
+    """Wraps a LangChain tool-calling agent with conversation history."""
 
     def __init__(self, books_df: pd.DataFrame, embeddings_matrix: np.ndarray):
         llm = ChatOpenAI(temperature=0, model=MODEL)
         tools = [make_search_tool(books_df, embeddings_matrix)]
-        self.agent = create_agent(
-            model=llm,
-            tools=tools,
-            system_prompt=SYSTEM_PROMPT,
-        )
+
+        prompt = ChatPromptTemplate.from_messages([
+            ("system", SYSTEM_PROMPT),
+            MessagesPlaceholder("chat_history"),
+            ("human", "{input}"),
+            MessagesPlaceholder("agent_scratchpad"),
+        ])
+
+        agent = create_tool_calling_agent(llm, tools, prompt)
+        self.executor = AgentExecutor(agent=agent, tools=tools, verbose=False)
         self.history: list = []
 
     def message(self, user_input: str) -> str:
         """Send a user message and return the assistant's reply."""
+        result = self.executor.invoke({
+            "input": user_input,
+            "chat_history": self.history,
+        })
+        reply = result["output"]
         self.history.append(HumanMessage(content=user_input))
-        result = self.agent.invoke({"messages": self.history})
-        # The agent returns the full message list; the last one is the reply.
-        reply_msg = result["messages"][-1]
-        reply = reply_msg.content
         self.history.append(AIMessage(content=reply))
         return reply
 

@@ -148,7 +148,7 @@ def recommend(
         # 6. (Optional) add a per-book explanation
         if add_reason is not None:
             try:
-                top_books = add_reason(top_books, user_prompt)
+                top_books = add_reason(top_books, user_prompt.query)
             except Exception as e:  # noqa: BLE001
                 print(f"[warn] add_reason failed, continuing without reasons: {e}")
 

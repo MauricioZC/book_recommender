@@ -45,7 +45,7 @@ def get_table(
     return result.reset_index(drop=True)
 
 
-def add_reason(top_books: pd.DataFrame, user_query: str, model="gpt-4o-mini") -> pd.DataFrame:
+def add_reason(top_books: pd.DataFrame, user_query: str, model="gpt-5.4-nano") -> pd.DataFrame:
     result = top_books.copy()
 
     try:
