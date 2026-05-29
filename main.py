@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 from src import (
-    receive_prompt,
+    UserPrompt,
     enhance_prompt,
     encode_prompt,
     similarity_score,
@@ -11,9 +11,9 @@ from src import (
 
 
 def main() -> None:
-    # --- 1. Receive & validate user input ---
-    user_prompt = receive_prompt(
-        "A dark fantasy about power and sacrifice",
+    # --- 1. Build the user prompt ---
+    user_prompt = UserPrompt(
+        query="A dark fantasy about power and sacrifice",
         genre="fantasy",
         min_rating=4.0,
     )

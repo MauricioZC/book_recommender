@@ -11,7 +11,7 @@ import numpy as np
 import pandas as pd
 
 from src import (
-    receive_prompt,
+    UserPrompt,
     enhance_prompt,
     encode_prompt,
     similarity_score,
@@ -372,7 +372,7 @@ def recommend(
                 "warn",
             )
 
-        user_prompt = receive_prompt(str(query).strip(), **filters)
+        user_prompt = UserPrompt(query=str(query).strip(), **filters)
 
         try:
             enhanced = enhance_prompt(user_prompt)

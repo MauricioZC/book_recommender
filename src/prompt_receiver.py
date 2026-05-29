@@ -24,14 +24,3 @@ class UserPrompt:
         return ", ".join(parts)
 
 
-def receive_prompt(query: str, **filters) -> UserPrompt:
-    query = query.strip()
-    if not query:
-        raise ValueError("Query cannot be empty.")
-
-    valid_fields = {f.name for f in UserPrompt.__dataclass_fields__.values()} - {"query"}
-    unknown = set(filters) - valid_fields
-    if unknown:
-        raise ValueError(f"Unknown filters: {unknown}. Valid filters: {valid_fields}")
-
-    return UserPrompt(query=query, **{k: v for k, v in filters.items() if v is not None})

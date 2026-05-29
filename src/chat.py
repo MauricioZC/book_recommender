@@ -9,7 +9,7 @@ from langchain.agents import create_tool_calling_agent, AgentExecutor
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 
 from src import (
-    receive_prompt,
+    UserPrompt,
     enhance_prompt,
     encode_prompt,
     similarity_score,
@@ -57,7 +57,7 @@ def make_search_tool(books_df: pd.DataFrame, embeddings_matrix: np.ndarray):
         Args:
             query: The user's description of what they want to read.
         """
-        user_prompt = receive_prompt(query)
+        user_prompt = UserPrompt(query=query)
         enhanced = enhance_prompt(user_prompt)
         query_embedding = encode_prompt(enhanced)
         scores = similarity_score(query_embedding, embeddings_matrix)

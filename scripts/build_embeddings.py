@@ -11,7 +11,6 @@ Usage:
 """
 
 import argparse
-import re
 
 import numpy as np
 import pandas as pd
@@ -19,12 +18,6 @@ from sentence_transformers import SentenceTransformer
 
 MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 BATCH_SIZE = 64
-
-
-def clean_text(text: str) -> str:
-    text = text.lower()
-    text = re.sub(r'[^a-z\s]', '', text)
-    return text
 
 
 def build_combined_text(row: pd.Series) -> str:
@@ -47,7 +40,7 @@ def main() -> None:
     df = df.fillna('')
     print(f"Loaded {len(df)} books from '{args.input}'")
 
-    texts = df.apply(build_combined_text, axis=1).apply(clean_text).tolist()
+    texts = df.apply(build_combined_text, axis=1).tolist()
 
     print(f"Loading model: {MODEL_NAME}")
     model = SentenceTransformer(MODEL_NAME)
