@@ -33,7 +33,6 @@ def main() -> None:
     scores = similarity_score(query_embedding, embeddings_matrix)
     top_books = get_table(books_df, scores, top_n=5)
 
-    # --- Teammates: pass top_books to add_reason() → generate_response() → print/Gradio ---
     print(top_books[['title', 'authors', 'categories', 'similarity_score']].to_string(index=False))
 
 

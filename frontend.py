@@ -18,10 +18,7 @@ from src import (
     get_table,
 )
 
-try:
-    from src import add_reason  # type: ignore
-except ImportError:
-    add_reason = None  # type: ignore
+from src import add_reason
 
 
 BOOKS_CSV = Path("books.csv")
@@ -1481,6 +1478,6 @@ CSS += r'''
 '''
 
 if __name__ == "__main__":
-    demo.launch(css=CSS, theme=THEME)
+    demo.launch(css=CSS, theme=THEME, server_port=8080)
     
 #uv run python frontend.py
